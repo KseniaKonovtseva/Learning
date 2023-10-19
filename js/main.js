@@ -35,7 +35,24 @@ const appData = {
     appData.addTitle()
     startBtn.addEventListener('click', appData.start)
     buttonPlus.addEventListener('click', appData.addScreenBlock)
-    inputRange.addEventListener('change', appData.getRollback)
+    screens.forEach((el) => {
+      el.addEventListener('input', () => {
+        const select = el.querySelector('select');
+        const input = el.querySelector('input');
+  
+        if (select.value === "" || input.value === "") {
+          startBtn.disabled = true;
+          console.log(select.value + " select");
+          startBtn.style.backgroundColor = 'grey';
+        } else {
+          startBtn.disabled = false;
+          startBtn.style.backgroundColor = '#A52A2A';
+        }
+      })
+    })
+    inputRange.addEventListener('input', appData.getRollback)
+    inputRange.addEventListener('input', this.addPrices)
+    inputRange.addEventListener('input', this.showResult)
   },
   start: function () {
     appData.addScreens();
@@ -66,13 +83,13 @@ const appData = {
       const input = screen.querySelector('input');
       const count = +input.value;
 
-      if (select.value === "" || input.value === "") {
-        startBtn.disabled = true;
-        startBtn.style.backgroundColor = 'grey';
-      } else {
-        startBtn.disabled = false;
-        startBtn.style.backgroundColor = '#A52A2A';
-      }
+      // if (select.value === "" || input.value === "") {
+      //   startBtn.disabled = true;
+      //   startBtn.style.backgroundColor = 'grey';
+      // } else {
+      //   startBtn.disabled = false;
+      //   startBtn.style.backgroundColor = '#A52A2A';
+      // }
 
       const selectName = select.options[select.selectedIndex].textContent;
       appData.screens.push({id: index, name: selectName, price: +select.value * +input.value, count: count});
@@ -121,11 +138,12 @@ const appData = {
     appData.fullPrice = +appData.screenPrice + appData.servicePricesNumber + appData.servicePricesPercent;
 
     appData.servicePercentPrice = Math.ceil(appData.fullPrice - (appData.fullPrice * (appData.rollback / 100)));
-  },
-  logger: function () {
-    console.log(appData.fullPrice);
     console.log(appData.servicePercentPrice);
-  }
+  },
+  // logger: function () {
+  //   console.log(appData.fullPrice);
+  //   console.log(appData.servicePercentPrice);
+  // }
 }
 
 appData.init();
